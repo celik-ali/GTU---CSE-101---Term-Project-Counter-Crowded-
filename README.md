@@ -15,7 +15,7 @@ When there is no action ---------------------- the Quota,
 
 While entering ------------------------------------- "Entering...",
 
-While leaving --------------------------------------- "Leaving...". 
+While leaving --------------------------------------- "Leaving...",
 
 When it reached to its full capacity ----- "Full Capacity".
 
