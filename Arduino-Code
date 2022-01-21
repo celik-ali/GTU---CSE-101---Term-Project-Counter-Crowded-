@@ -1,0 +1,133 @@
+#include <Wire.h> 
+#include <LiquidCrystal_I2C.h>
+
+unsigned int sure_g, sure_c, mesafe_g, mesafe_c; 
+int max_p = 4; // Setting a limit for maximum number of people allowed to enter
+int kisi = 0; // Counter
+int echo_g =13; // Sensors
+int echo_c = 3;
+int trig_g = 12;
+int trig_c = 4;
+int red_c = 11; // RGB LEDS
+int green_c = 10; 
+int red_g = 9; 
+int green_g = 8; 
+const int buzzer=7; //Buzzer
+
+LiquidCrystal_I2C lcd (0x27, 16, 2); //LCD Screen
+
+void setup(){
+lcd.begin();
+lcd.backlight();
+pinMode(echo_g,INPUT);
+pinMode(trig_g,OUTPUT);
+
+pinMode(echo_c,INPUT);
+pinMode(trig_c,OUTPUT);
+
+pinMode(red_g, OUTPUT); 
+pinMode(green_g, OUTPUT);   
+pinMode(red_c, OUTPUT); 
+pinMode(green_c, OUTPUT); 
+  
+digitalWrite(red_g, HIGH);
+digitalWrite(green_g, HIGH);
+digitalWrite(red_c, HIGH);
+digitalWrite(green_c, HIGH);
+
+pinMode(buzzer,OUTPUT);
+}
+
+void loop(){
+ digitalWrite(trig_g,HIGH);
+ delayMicroseconds(20);
+ digitalWrite(trig_g,LOW);
+ sure_g=pulseIn(echo_g,HIGH);
+ mesafe_g=(sure_g/2)/29.1;
+ delay(100);
+ 
+ digitalWrite(trig_c,HIGH);
+ delayMicroseconds(20);
+ digitalWrite(trig_c,LOW);
+ sure_c=pulseIn(echo_c,HIGH);
+ mesafe_c=(sure_c/2)/29.1;
+ delay(100);
+ 
+  if(kisi < max_p){
+      digitalWrite(green_g, LOW);
+      digitalWrite(green_c, LOW);
+      lcd.setCursor(4, 0);
+      lcd.print("WELCOME");
+      lcd.setCursor(0, 1);
+      lcd.print("QUOTA: ");
+      lcd.print(kisi);
+      lcd.print("/");
+      lcd.print(max_p);
+          
+      if (mesafe_g<70){
+        kisi++;
+        lcd.setCursor(0, 0);
+        lcd.print("ENTERING...");
+        lcd.setCursor(0, 1);
+        lcd.print("************");
+        digitalWrite(green_c, HIGH);
+        digitalWrite(red_g, LOW);
+        digitalWrite(red_c, LOW);
+        delay(3000);
+        digitalWrite(red_g, HIGH);
+        digitalWrite(red_c, HIGH);
+        lcd.clear();
+      }
+      
+      if (mesafe_c<70 && kisi>0){
+        kisi--;
+        lcd.clear();
+        lcd.setCursor(0, 0);
+        lcd.print("LEAVING...");
+        lcd.setCursor(0, 1);
+        lcd.print("************");
+        digitalWrite(green_g, HIGH);
+        digitalWrite(red_g, LOW);
+        digitalWrite(red_c, LOW);
+        delay(3000);
+        digitalWrite(red_g, HIGH);
+        digitalWrite(red_c, HIGH);
+        lcd.clear();
+      }  
+  }
+  
+  if(kisi == max_p){
+  lcd.setCursor(6, 0);
+  lcd.print("FULL");
+  lcd.setCursor(4, 1);
+  lcd.print("CAPACITY");
+  digitalWrite(green_g, HIGH);
+  digitalWrite(green_c, HIGH);
+  digitalWrite(red_g, LOW);
+  digitalWrite(red_c, LOW);
+  }
+  
+  if(mesafe_c<70 && kisi==max_p){
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("LEAVING...");
+    lcd.setCursor(0, 1);
+    lcd.print("************");
+    digitalWrite(green_c, LOW);
+    digitalWrite(red_g, LOW);
+    digitalWrite(red_c, LOW);
+    delay(3000);
+    digitalWrite(red_g, HIGH);
+    digitalWrite(red_c, HIGH);
+    kisi--;
+    lcd.clear();
+  }
+  
+  if (mesafe_g<70 && kisi==max_p){
+    tone(buzzer, 1000); // Send 1KHz sound signal...
+    delay(1500);        // ...for 1 sec
+    noTone(buzzer);     // Stop sound...
+    delay(1500);        // ...for 1sec
+    lcd.clear();
+  }
+}
