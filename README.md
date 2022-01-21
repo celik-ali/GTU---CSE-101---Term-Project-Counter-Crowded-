@@ -1,7 +1,10 @@
 # GTU---CSE-101---Term-Project---Counter-Crowded-
 Gebze Technical University CSE 101 Term Project. (Group 20)
+
 Project Name: Counter-Crowded
+
 Purpose: Prevent the overcrowded places. During Covid-19 limited seats are example for project's usage area and how necessary this project is.
+
 Equipments:
 
 1 x Arduino UNO
@@ -17,9 +20,13 @@ Jumper Cables
 ---------------------------------------------------------------------------------------------------------------------------
 
 Gebze Teknik Üniversitesi CSE 101 dönem projesi. (Grup 20)
+
 Proje Adı: Counter-Crowded
+
 Amacı: Bir oda, salon vb. için belirlenen kişi sayısından fazlasının alınmasını önlemek. Özellikle Covid-19 döneminde hayatımıza yerleşen bazı yerlerde sınırlı sayıda kişi alımı yapılması kullanım alanına ve gerekliliğine örnek olarak verilebilir.
+
 Gerekli ekipmanlar:
+
 1 x Arduino UNO
 1 x LCD ekran (I2C ile beraber)
 2 x HC-SR04 Sensör
